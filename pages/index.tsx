@@ -3,7 +3,16 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-import facts from '../public/beaverfacts.json';
+import {facts} from '../public/beaverfacts.json';
+
+const BeaverFact = () => {
+
+  const randomFact = facts[Math.floor(Math.random() * facts.length)];
+
+  return (
+    <p>{randomFact.fact}</p>
+  )
+}
 
 const Home: NextPage = () => {
   return (
@@ -11,11 +20,17 @@ const Home: NextPage = () => {
       <Head>
         <title>Beaverfacts.com</title>
         <meta name="description" content="Beaver facts" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
 
       <main className={styles.main}>
-        <pre>{JSON.stringify(facts, null, 2)}</pre>
+        <Image 
+          src="/Beaverhugs1.png" 
+          alt="Drawing of a beaver hugging a maple leaf"
+          width={500}
+          height={500}
+        />
+        <BeaverFact />
       </main>
 
       <footer className={styles.footer}>
