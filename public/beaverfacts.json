@@ -43,6 +43,16 @@
     {
       "fact": "Beavers are one of the few animals that modify their habitat Beavers build watertight dams made of woven sticks, reeds, branches and saplings caulked together with mud and rocks.",
       "source": "@inshane2 on Twitch"
-    }
+    },
+    { "fact": "Beavers are known for building dams, which create ponds providing habitats for various wildlife.", "source": "ChatGPT" },
+    { "fact": "They have powerful front teeth that never stop growing, allowing them to gnaw through trees.", "source": "ChatGPT" },
+    { "fact": "Beavers are the second largest rodents in the world, after capybaras.", "source": "ChatGPT" },
+    { "fact": "Their large, flat tails are used for balance, fat storage, and communication.", "source": "ChatGPT" },
+    { "fact": "Beavers have webbed feet, making them excellent swimmers capable of staying underwater for up to 15 minutes.", "source": "ChatGPT" },
+    { "fact": "They construct lodges in the middle of ponds with underwater entrances to keep predators out.", "source": "ChatGPT" },
+    { "fact": "Beavers play a crucial role in maintaining wetlands, which help filter water and reduce flooding.", "source": "ChatGPT" },
+    { "fact": "They primarily eat tree bark and aquatic plants, with willow, birch, and maple being their favorites.", "source": "ChatGPT" },
+    { "fact": "Beavers are monogamous, typically mating for life and raising their kits together.", "source": "ChatGPT" },
+    { "fact": "North American beavers can reach up to 60 pounds in weight, while their Eurasian counterparts are slightly smaller.", "source": "ChatGPT" }
   ]
 }
