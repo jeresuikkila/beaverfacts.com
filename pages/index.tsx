@@ -1,4 +1,4 @@
-import type { NextPage, GetStaticProps } from "next";
+import type { NextPage, GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
@@ -56,8 +56,8 @@ const Home: NextPage<HomeProps> = ({ fact, source }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  // Select a random fact at build time
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+  // Select a random fact on each request
   const randomFact = facts.facts[Math.floor(Math.random() * facts.facts.length)];
 
   return {
@@ -65,8 +65,6 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
       fact: randomFact.fact,
       source: randomFact.source,
     },
-    // Revalidate every 3600 seconds (1 hour) to show different facts
-    revalidate: 3600,
   };
 };
 
