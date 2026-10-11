@@ -1,0 +1,52 @@
+---
+import { Image } from "astro:assets";
+import "../styles/globals.css";
+import beaverHugs from "../assets/Beaverhugs1.png";
+import facts from "../beaverfacts.json";
+
+const randomFact = facts.facts[Math.floor(Math.random() * facts.facts.length)];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Beaverfacts.com</title>
+    <meta name="description" content="Beaver facts" />
+    <link rel="icon" href="/favicon.png" />
+  </head>
+  <body>
+    <main>
+      <Image
+        src={beaverHugs}
+        alt="Drawing of a beaver hugging a maple leaf"
+        width={500}
+        height={500}
+        loading="eager"
+      />
+      <p id="fact">{randomFact.fact}</p>
+    </main>
+
+    <script is:inline define:vars={{ facts: facts.facts.map((f) => f.fact) }}>
+      // The page is static, so pick a new fact on every visit.
+      document.getElementById("fact").textContent =
+        facts[Math.floor(Math.random() * facts.length)];
+    </script>
+  </body>
+</html>
+
+<style>
+  main {
+    min-height: 100vh;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
