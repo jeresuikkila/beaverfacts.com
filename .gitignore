@@ -40,3 +40,7 @@ yarn-error.log*
 
 # wrangler
 .wrangler/
+
+# blender
+blender/*.raw.glb
+*.blend1

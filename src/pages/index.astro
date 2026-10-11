@@ -41,37 +41,190 @@ const ogImage = new URL(beaverHugs.src, siteUrl).href;
     />
   </head>
   <body>
+    <canvas id="scene" aria-hidden="true"></canvas>
     <main>
-      <Image
-        src={beaverHugs}
-        alt="Drawing of a beaver hugging a maple leaf"
-        width={500}
-        height={500}
-        loading="eager"
-      />
-      <p id="fact">{randomFact.fact}</p>
+      <div id="stage">
+        <Image
+          id="fallback"
+          src={beaverHugs}
+          alt="Drawing of a beaver hugging a maple leaf"
+          width={500}
+          height={500}
+          loading="eager"
+        />
+      </div>
+      <section class="card">
+        <p id="fact" aria-live="polite">{randomFact.fact}</p>
+        <button id="another" type="button">Tell me another</button>
+      </section>
     </main>
 
-    <script is:inline define:vars={{ facts: facts.facts.map((f) => f.fact) }}>
-      // The page is static, so pick a new fact on every visit.
-      document.getElementById("fact").textContent =
-        facts[Math.floor(Math.random() * facts.length)];
+    <script>
+      import facts from "../beaverfacts.json";
+
+      const all = facts.facts.map((f) => f.fact);
+      const factEl = document.getElementById("fact")!;
+      let current = -1;
+
+      // The page is static, so pick a new fact on every visit (and on request).
+      function showFact() {
+        let i;
+        do i = Math.floor(Math.random() * all.length);
+        while (i === current && all.length > 1);
+        current = i;
+        factEl.textContent = all[i];
+        factEl.classList.remove("pop");
+        void factEl.offsetWidth; // restart the animation
+        factEl.classList.add("pop");
+      }
+      showFact();
+      document.getElementById("another")!.addEventListener("click", showFact);
+
+      // Swap the drawing for the 3D beaver once it's loaded; keep the drawing
+      // if WebGL or the model isn't available.
+      const canvas = document.getElementById("scene") as HTMLCanvasElement;
+      const stage = document.getElementById("stage")!;
+      import("../scripts/beaver-scene")
+        .then(({ mountBeaverScene }) =>
+          mountBeaverScene(canvas, {
+            stage: () => stage.getBoundingClientRect(),
+            reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
+            onTap: showFact,
+          }),
+        )
+        .then(() => document.documentElement.classList.add("has-3d"))
+        .catch((err) => console.warn("3D beaver unavailable:", err));
     </script>
   </body>
 </html>
 
 <style>
+  #scene {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+
+  /* Fade the drawing out first, then the 3D beaver in, so they never overlap */
+  :global(.has-3d) #scene {
+    opacity: 1;
+    transition-delay: 0.25s;
+  }
+
   main {
+    position: relative;
     min-height: 100vh;
-    padding: 4rem 2rem;
+    min-height: 100dvh;
+    padding: 1.5rem 1rem 2rem;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    pointer-events: none;
+  }
+
+  #stage {
+    flex: 1;
+    width: 100%;
+    min-height: 16rem;
+    display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  img {
-    max-width: 100%;
+  #fallback {
+    width: min(100%, 500px, 52dvh);
     height: auto;
+    object-fit: contain;
+    transition: opacity 0.25s ease;
+  }
+
+  :global(.has-3d) #fallback {
+    opacity: 0;
+  }
+
+  .card {
+    pointer-events: auto;
+    width: 100%;
+    max-width: 38rem;
+    padding: 1.25rem 1.5rem;
+    background: #fff8ea;
+    color: #2a1a10;
+    border: 3px solid #1a1110;
+    border-radius: 1.25rem;
+    box-shadow: 0 6px 0 #1a1110;
+    text-align: center;
+  }
+
+  #fact {
+    margin: 0 0 1rem;
+    font-size: clamp(1.05rem, 2.6vw, 1.3rem);
+    line-height: 1.5;
+  }
+
+  #fact.pop {
+    animation: pop 0.35s ease-out;
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  #another {
+    font: inherit;
+    font-weight: 700;
+    padding: 0.55rem 1.2rem;
+    color: #fff8ea;
+    background: #b4002b;
+    border: 3px solid #1a1110;
+    border-radius: 999px;
+    box-shadow: 0 4px 0 #1a1110;
+    cursor: pointer;
+  }
+
+  #another:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #1a1110;
+  }
+
+  #another:focus-visible {
+    outline: 3px solid #1a1110;
+    outline-offset: 3px;
+  }
+
+  /* Landscape: beaver on the left, fact on the right */
+  @media (orientation: landscape) and (min-width: 700px) {
+    main {
+      flex-direction: row;
+      padding: 1.5rem 2rem;
+      gap: 2rem;
+    }
+
+    #stage {
+      align-self: stretch;
+    }
+
+    #fallback {
+      width: min(100%, 500px, 85dvh);
+    }
+
+    .card {
+      flex: 0 1 26rem;
+      align-self: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #fact.pop {
+      animation: none;
+    }
   }
 </style>
