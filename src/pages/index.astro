@@ -5,15 +5,40 @@ import beaverHugs from "../assets/Beaverhugs1.png";
 import facts from "../beaverfacts.json";
 
 const randomFact = facts.facts[Math.floor(Math.random() * facts.facts.length)];
+
+const siteUrl = "https://beaverfacts.com";
+const title = "Beaverfacts.com - Amazing Facts About Beavers";
+const description =
+  "Discover fascinating facts about beavers! Learn about these amazing rodents, their dams, lodges, and important role in ecosystems.";
+const ogImage = new URL(beaverHugs.src, siteUrl).href;
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Beaverfacts.com</title>
-    <meta name="description" content="Beaver facts" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <link rel="icon" href="/favicon.png" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={siteUrl} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImage} />
+
+    <meta
+      name="keywords"
+      content="beavers, beaver facts, wildlife, rodents, dams, lodges, nature, animals"
+    />
   </head>
   <body>
     <main>
